@@ -1,0 +1,27 @@
+name: Docker CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  construir-imagenes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Crear archivo .env de prueba
+        run: |
+          cp .env.example .env
+
+      - name: Validar configuración de Docker Compose
+        run: docker compose config --quiet
+
+      - name: Construir las dos imágenes
+        run: docker compose build app db
